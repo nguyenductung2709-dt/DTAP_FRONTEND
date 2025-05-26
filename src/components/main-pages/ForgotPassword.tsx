@@ -14,6 +14,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ darkTheme }) => {
   const [modalData, setModalData] = useState<{ title: string; message: string } | null>(null);
   const navigate = useNavigate();
 
+  console.log(newPassword);
   const handleValidateToken = async () => {
     try {
       const response = await authenticationService.validateToken({

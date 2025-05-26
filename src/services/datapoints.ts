@@ -12,7 +12,8 @@ const getById = async (id: string): Promise<any> => {
 };
 
 const startProcess = async(id: string, ipAddress: string): Promise<any> => {
-    const response = await axios.post(`http://${ipAddress}/measure`, { deviceId: id });
+    console.log("Starting process for device:", id, "at IP address:", ipAddress);
+    const response = await axios.post(`${baseUrl2}/start`, { deviceId: id });
     return response.data;
 }
 

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { io } from "socket.io-client";
 import { MuscleList } from "../../data/muscle.ts";
-import { GuideList } from "../../data/guides.ts";
 import { useDevice } from "../../context/DeviceContext.tsx";
 import { useNavigate } from "react-router-dom";
 //Vy's
@@ -60,10 +59,6 @@ const Measure: React.FC<MeasureProps> = ({ darkTheme }) => {
     setSelectedMuscle((prev) => (prev === muscle ? null : muscle));
   };
 
-  const getPlacementGuide = (muscle: string) => {
-    const guide = GuideList.find((guide) => guide.muscles.includes(muscle));
-    return guide?.image;
-  };
   //Vy's
   const getmuscleImage = (muscle: string) => {
     const guide = MuscleList.find((guide) => guide.name === muscle);

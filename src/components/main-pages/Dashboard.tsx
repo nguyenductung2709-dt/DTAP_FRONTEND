@@ -41,11 +41,13 @@ const Dashboard: React.FC<DashboardProps> = ({ darkTheme }) => {
         }
         // Get all devices for the user
         const devices = await deviceService.getByUsername(user.username);
+        console.log("Devices:", devices);
         // Fetch datapoints for all devices and combine
 
         let allData: any[] = [];
         for (const device of devices) {
           const deviceData = await dataPointService.getById(device.deviceId);
+          console.log(`Data for device ${device.deviceId}:`, deviceData);
           if (Array.isArray(deviceData)) {
             allData = allData.concat(deviceData);
           }
@@ -156,20 +158,18 @@ const Dashboard: React.FC<DashboardProps> = ({ darkTheme }) => {
 
   return (
     <div
-      className={`w-screen p-4 flex items-center flex-col justify-center ${
+      className={`w-screen p-4 flex items-center flex-col justify-center h-screen ${
         darkTheme ? "bg-primary_dark text-white" : "bg-white text-black"
       }`}
     >
       <h1 className="text-3xl md:text-5xl font-primary font-semibold mb-4 pt-20 text-center">Workout Metrics</h1>
-      <div className="flex flex-col md:flex-row gap-2 mb-6">
+      <div className="flex flex-col sm:flex-row gap-2 mb-6">
         <Dropdown
           title="Select Muscle"
           optionList={[
-            { name: "Select Muscle", label: "Select Muscle", value: "Select Muscle" },
+            { name: "Select Muscle" },
             ...uniqueMuscleGroups.map(muscle => ({
               name: muscle,
-              label: muscle,
-              value: muscle
             }))
           ]}
           darkTheme={darkTheme}
@@ -178,36 +178,16 @@ const Dashboard: React.FC<DashboardProps> = ({ darkTheme }) => {
         />
         <Dropdown
           title="Period"
-          optionList={[
-            { name: "Last 7 days" },
-            { name: "Last 30 days" },
-            { name: "All" }
-          ]}
+          optionList={[{name:"7"},{name:"30"},{name:"All"}]}
           darkTheme={darkTheme}
-          onSelect={(value) => {
-            if (value === "All") {
-              setSelectedPeriod(Infinity);
-            } else if (value === "Last 7 days") {
-              setSelectedPeriod(7);
-            } else if (value === "Last 30 days") {
-              setSelectedPeriod(30);
-            }
-          }}
-          selectedValue={
-            selectedPeriod === Infinity
-              ? "All"
-              : selectedPeriod === 7
-              ? "Last 7 days"
-              : selectedPeriod === 30
-              ? "Last 30 days"
-              : ""
-          }
+          onSelect={(value) => setSelectedPeriod(value==="All"? Infinity:parseInt(value))}
+          selectedValue={selectedPeriod === Infinity ? "All" : selectedPeriod.toString()}
         />
       </div>
       {selectedMuscle === null ? (
         <div className="flex flex-col items-center justify-center mt-12">
           <p className="text-lg md:text-2xl font-mono text-gray-400 mb-4">
-            Please select a muscle group to view your workout metrics
+            Please select a muscle group to view your workout metrics.
           </p>
           <div className="w-32 h-32 md:w-48 md:h-48 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-200 to-blue-400 opacity-60 animate-pulse">
             <span className="text-4xl md:text-6xl text-blue-700 font-bold">💪</span>
@@ -215,23 +195,23 @@ const Dashboard: React.FC<DashboardProps> = ({ darkTheme }) => {
         </div>
       ) : filteredData.length > 0 ? (
         <>
-          <div className="w-full max-w-4xl h-[300px] mb-8">
+          <div className="w-full max-w-2xl h-[300px] mb-8">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={slicedData}
-                margin={{ top: 30, right: 20, left: 20, bottom: 5 }}>
+                margin={{ top: 20, right: 50, left: 0, bottom: 5 }}>
                 <XAxis
                   dataKey="date"
-                  tick={{ fontSize: 13 }}
+                  tick={{ fontSize: 12 }}
                   angle={-45}
                   textAnchor="end"
                 />
                 <YAxis
-                  label={{ value: "Median Frequency (Hz)", angle: -90, position: "outsideLeft", offset: 30, fontFamily: "monospace", fontSize: 13 }}
-                  tick={{ fontSize: 13 }} />
+                  label={{ value: "Median Frequency (Hz)", angle: -90, position: "outsideLeft", offset: 50, fontFamily: "monospace", fontSize: 12 }}
+                  tick={{ fontSize: 12 }} />
                 <CartesianGrid strokeDasharray="5 5" />
                 <Tooltip contentStyle={{ fontFamily: "monospace", fontSize: 13 }}
                   labelStyle={{ color: "black", fontWeight: "bold" }} />
-                <Legend wrapperStyle={{ paddingTop: 40, display: 'flex', justifyContent: 'center', gap: 20, fontFamily: "monospace", fontSize: 13 }} />
+                <Legend wrapperStyle={{ paddingTop: 30, display: 'flex', justifyContent: 'center', gap: 20, fontFamily: "monospace", fontSize: 12 }} />
                 <Line type="monotone" dataKey="beforeWorkout" stroke="#ff5733" />
                 <Line type="monotone" dataKey="afterWorkout" stroke="#3356ff" />
               </LineChart>

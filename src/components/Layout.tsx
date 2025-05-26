@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 import { FaMoon, FaSun } from 'react-icons/fa';
 import UserDropdown from "./common-components/UserDropdown";
 import Muscle_Black from "../assets/muscle_logo_black.png"
